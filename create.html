@@ -408,7 +408,7 @@ for i in range(5):
 
     if (lang === "python") {
       try {
-        const resp = await fetch("/api/run/python", {
+        const resp = await fetch("/api/run-python", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ code }),
