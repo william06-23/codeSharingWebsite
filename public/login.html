@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NewCode — Log In</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #F2EADF;
+      color: #7857AB;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      padding: 10px 24px;
+      background: #e8e2d6;
+      border-bottom: 1px solid #e5e0d8;
+    }
+
+    .topbar .brand {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #7857AB;
+      text-decoration: none;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border: 1px solid #e5e0d8;
+      border-radius: 14px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .form-card h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #7857AB;
+      margin-bottom: 4px;
+    }
+
+    .form-card .subtitle {
+      font-size: 0.85rem;
+      color: #23307E;
+      margin-bottom: 24px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #23307E;
+      margin-bottom: 4px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #d5cfc6;
+      background: #F2EADF;
+      color: #7857AB;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input::placeholder { color: #b0a89a; }
+    .field input:focus { border-color: #7857AB; }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #23307E;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: inherit;
+    }
+    .btn:hover { opacity: 0.9; }
+
+    .switch {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #23307E;
+    }
+
+    .switch a {
+      color: #7857AB;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .switch a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/main.html" class="brand">NewCode</a>
+</header>
+
+<main>
+  <div class="form-card">
+    <h1>Log In</h1>
+    <p class="subtitle">Welcome back to NewCode</p>
+
+    <div class="field">
+      <label for="login">Username or Email</label>
+      <input type="text" id="login" placeholder="Username or email" required>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Your password" required>
+    </div>
+
+    <button class="btn" id="loginBtn">Log In</button>
+
+    <p class="switch">Don't have an account? <a href="/signup.html">Sign Up</a></p>
+  </div>
+</main>
+
+<script>
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    const l = document.getElementById("login").value.trim();
+    const p = document.getElementById("password").value;
+
+    if (!l || !p) { alert("Please fill in all fields."); return; }
+
+    alert("Logged in! (frontend only — backend not connected)");
+    window.location.href = "/main.html";
+  });
+</script>
+
+</body>
+</html>

@@ -5,10 +5,10 @@ const fs = require("fs");
 const os = require("os");
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-const SUPABASE_URL = "https://umksqnwwkdoqpgezhqjb.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_YD3I4V9Gy9ANNCzYGZsAyg_r9buWrxD";
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://umksqnwwkdoqpgezhqjb.supabase.co";
+const SUPABASE_ANON_KEY = process.env.SUPABASE_KEY || "sb_publishable_YD3I4V9Gy9ANNCzYGZsAyg_r9buWrxD";
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(__dirname, "public")));
