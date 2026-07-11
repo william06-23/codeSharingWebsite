@@ -6,15 +6,15 @@
   <title>NewCode — Create</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #1e1e2e;
-      color: #cdd6f4;
+      background: #f8f9fa;
+      color: #1f1f2e;
       padding: 0;
       margin: 0;
     }
@@ -25,8 +25,8 @@
       align-items: center;
       gap: 12px;
       padding: 10px 20px;
-      background: #11111b;
-      border-bottom: 1px solid #313244;
+      background: #f0f0f3;
+      border-bottom: 1px solid #d4d4d8;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -72,7 +72,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #a6adc8;
+      color: #585b70;
       margin-bottom: 4px;
     }
 
@@ -81,15 +81,15 @@
       width: 100%;
       padding: 8px 12px;
       border-radius: 6px;
-      border: 1px solid #45475a;
-      background: #11111b;
-      color: #cdd6f4;
+      border: 1px solid #c4c4cc;
+      background: #f0f0f3;
+      color: #1f1f2e;
       font-size: 0.85rem;
       font-family: inherit;
     }
 
     .field input::placeholder,
-    .field textarea::placeholder { color: #6c7086; }
+    .field textarea::placeholder { color: #8e8ea0; }
 
     .field textarea {
       resize: vertical;
@@ -105,8 +105,8 @@
     }
 
     .pane {
-      background: #181825;
-      border: 1px solid #313244;
+      background: #ffffff;
+      border: 1px solid #d4d4d8;
       border-radius: 8px;
       display: flex;
       flex-direction: column;
@@ -120,10 +120,10 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #a6adc8;
+      color: #585b70;
       padding: 6px 12px;
-      background: #11111b;
-      border-bottom: 1px solid #313244;
+      background: #f0f0f3;
+      border-bottom: 1px solid #d4d4d8;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -132,8 +132,8 @@
 
     .pane-label .expand-btn {
       background: none;
-      border: 1px solid #45475a;
-      color: #a6adc8;
+      border: 1px solid #c4c4cc;
+      color: #585b70;
       cursor: pointer;
       font-size: 0.85rem;
       padding: 2px 6px;
@@ -145,9 +145,9 @@
     .pane-label .lang-inline {
       padding: 2px 6px;
       border-radius: 4px;
-      border: 1px solid #45475a;
-      background: #11111b;
-      color: #a6adc8;
+      border: 1px solid #c4c4cc;
+      background: #f0f0f3;
+      color: #585b70;
       font-size: 0.65rem;
       font-weight: 600;
       text-transform: uppercase;
@@ -208,15 +208,15 @@
       font-family: "JetBrains Mono", "Fira Code", monospace;
       font-size: 13px;
       white-space: pre-wrap;
-      color: #cdd6f4;
+      color: #1f1f2e;
     }
     .output-text.error { color: #f38ba8; }
-    .output-text.empty  { color: #6c7086; font-style: italic; }
+    .output-text.empty  { color: #8e8ea0; font-style: italic; }
 
     .status-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      background: #6c7086;
+      background: #8e8ea0;
       flex-shrink: 0;
     }
     .status-dot.ok  { background: #a6e3a1; }
@@ -234,16 +234,16 @@
     .controls-row button {
       padding: 6px 14px;
       border-radius: 6px;
-      border: 1px solid #45475a;
-      background: #313244;
-      color: #cdd6f4;
+      border: 1px solid #c4c4cc;
+      background: #d4d4d8;
+      color: #1f1f2e;
       font-size: 0.85rem;
       cursor: pointer;
     }
 
     .controls-row button.run-btn {
       background: #cba6f7;
-      color: #1e1e2e;
+      color: #1f1f2e;
       font-weight: 600;
       border: none;
     }
@@ -251,7 +251,7 @@
 
     .controls-row button.publish-btn {
       background: #a6e3a1;
-      color: #1e1e2e;
+      color: #1f1f2e;
       font-weight: 600;
       border: none;
       padding: 6px 22px;
@@ -357,7 +357,7 @@ for i in range(5):
   const cm = CodeMirror(document.getElementById("editorContainer"), {
     value: defaults.html,
     mode: "htmlmixed",
-    theme: "dracula",
+    theme: "eclipse",
     lineNumbers: true,
     indentUnit: 2,
     tabSize: 2,

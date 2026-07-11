@@ -9,8 +9,8 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #1e1e2e;
-      color: #cdd6f4;
+      background: #f8f9fa;
+      color: #1f1f2e;
       min-height: 100vh;
     }
 
@@ -19,8 +19,8 @@
       display: flex;
       align-items: center;
       padding: 10px 24px;
-      background: #11111b;
-      border-bottom: 1px solid #313244;
+      background: #f0f0f3;
+      border-bottom: 1px solid #d4d4d8;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -37,15 +37,15 @@
       flex: 0 1 400px;
       padding: 8px 14px;
       border-radius: 20px;
-      border: 1px solid #45475a;
-      background: #1e1e2e;
-      color: #cdd6f4;
+      border: 1px solid #c4c4cc;
+      background: #f8f9fa;
+      color: #1f1f2e;
       font-size: 0.85rem;
       font-family: inherit;
       outline: none;
       transition: border-color 0.2s;
     }
-    .topbar .search-bar::placeholder { color: #6c7086; }
+    .topbar .search-bar::placeholder { color: #8e8ea0; }
     .topbar .search-bar:focus { border-color: #cba6f7; }
 
     .topbar .spacer { flex: 1; }
@@ -53,9 +53,9 @@
     .topbar .auth-btn {
       padding: 6px 14px;
       border-radius: 6px;
-      border: 1px solid #45475a;
-      background: #313244;
-      color: #cdd6f4;
+      border: 1px solid #c4c4cc;
+      background: #d4d4d8;
+      color: #1f1f2e;
       font-size: 0.8rem;
       cursor: pointer;
       margin-left: 8px;
@@ -63,7 +63,7 @@
 
     .topbar .auth-btn.primary {
       background: #cba6f7;
-      color: #1e1e2e;
+      color: #1f1f2e;
       border: none;
       font-weight: 600;
     }
@@ -91,7 +91,7 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: #6c7086;
+      color: #8e8ea0;
       margin-bottom: 12px;
     }
 
@@ -107,16 +107,16 @@
       border-radius: 8px;
       font-size: 0.9rem;
       cursor: pointer;
-      color: #a6adc8;
+      color: #585b70;
       transition: background 0.15s;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .filter-list li:hover { background: #313244; }
+    .filter-list li:hover { background: #d4d4d8; }
     .filter-list li.active {
-      background: #313244;
+      background: #d4d4d8;
       color: #cba6f7;
       font-weight: 600;
     }
@@ -124,12 +124,12 @@
     .filter-list .count {
       margin-left: auto;
       font-size: 0.7rem;
-      color: #6c7086;
-      background: #1e1e2e;
+      color: #8e8ea0;
+      background: #f8f9fa;
       padding: 1px 7px;
       border-radius: 10px;
     }
-    .filter-list li.active .count { background: #45475a; color: #cba6f7; }
+    .filter-list li.active .count { background: #c4c4cc; color: #cba6f7; }
 
     /* ── Center feed ── */
     .feed {
@@ -157,20 +157,20 @@
       margin-left: auto;
       padding: 6px 12px;
       border-radius: 8px;
-      border: 1px solid #45475a;
-      background: #313244;
-      color: #cdd6f4;
+      border: 1px solid #c4c4cc;
+      background: #d4d4d8;
+      color: #1f1f2e;
       font-size: 0.85rem;
       cursor: pointer;
     }
 
     .work-card {
-      background: #181825;
-      border: 1px solid #313244;
+      background: #ffffff;
+      border: 1px solid #d4d4d8;
       border-radius: 14px;
       padding: 24px 28px;
       text-decoration: none;
-      color: #cdd6f4;
+      color: #1f1f2e;
       transition: border-color 0.2s, transform 0.12s;
       display: flex;
       flex-direction: column;
@@ -195,7 +195,7 @@
       letter-spacing: 0.5px;
       padding: 4px 10px;
       border-radius: 5px;
-      background: #313244;
+      background: #d4d4d8;
       color: #cba6f7;
       flex-shrink: 0;
     }
@@ -203,13 +203,13 @@
     .work-card .title {
       font-size: 1.1rem;
       font-weight: 600;
-      color: #cdd6f4;
+      color: #1f1f2e;
       line-height: 1.3;
     }
 
     .work-card .desc {
       font-size: 0.9rem;
-      color: #a6adc8;
+      color: #585b70;
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -222,7 +222,7 @@
       align-items: center;
       gap: 16px;
       font-size: 0.78rem;
-      color: #6c7086;
+      color: #8e8ea0;
     }
 
     .work-card .card-footer .dot {
@@ -252,7 +252,7 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: #6c7086;
+      color: #8e8ea0;
       margin-bottom: 12px;
     }
 
@@ -268,14 +268,14 @@
       border-radius: 8px;
       font-size: 0.88rem;
       cursor: pointer;
-      color: #a6adc8;
+      color: #585b70;
       transition: background 0.15s;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .trending-list li:hover { background: #313244; }
+    .trending-list li:hover { background: #d4d4d8; }
 
     .trending-list .rank {
       font-size: 0.85rem;
@@ -294,7 +294,7 @@
 
     .trending-list .info .name {
       font-size: 0.85rem;
-      color: #cdd6f4;
+      color: #1f1f2e;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -302,7 +302,7 @@
 
     .trending-list .info .meta {
       font-size: 0.65rem;
-      color: #6c7086;
+      color: #8e8ea0;
     }
 
     .sidebar-right .tag-cloud {
@@ -316,12 +316,12 @@
       padding: 5px 14px;
       border-radius: 14px;
       font-size: 0.78rem;
-      background: #313244;
-      color: #a6adc8;
+      background: #d4d4d8;
+      color: #585b70;
       cursor: pointer;
       transition: background 0.15s;
     }
-    .sidebar-right .tag:hover { background: #45475a; color: #cdd6f4; }
+    .sidebar-right .tag:hover { background: #c4c4cc; color: #1f1f2e; }
 
     /* ── Floating create button ── */
     .create-btn {
@@ -331,7 +331,7 @@
       padding: 16px 36px;
       border-radius: 32px;
       background: #cba6f7;
-      color: #1e1e2e;
+      color: #1f1f2e;
       font-size: 1.05rem;
       font-weight: 700;
       border: none;
