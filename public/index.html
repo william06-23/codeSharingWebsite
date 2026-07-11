@@ -403,7 +403,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -542,7 +541,7 @@ for i in range(5):
     const mode = cm.getOption("mode");
     const modeToLang = {
       "htmlmixed": "html",
-      "python": "python", "text/x-c++src": "cpp"
+      "python": "python"
     };
     const lang = modeToLang[mode] || "html";
 
@@ -558,11 +557,6 @@ for i in range(5):
       return;
     }
 
-    // C++ — syntax only
-    if (lang === "cpp") {
-      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
-      statusDot.className = "status-dot ok";
-    }
 
     if (lang === "python") {
       try {
@@ -592,11 +586,6 @@ for i in range(5):
       return;
     }
 
-    // C++ — syntax only
-    if (lang === "cpp") {
-      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
-      statusDot.className = "status-dot ok";
-    }
 
   });
 
@@ -622,11 +611,6 @@ for i in range(5):
       return;
     }
 
-    // C++ — syntax only
-    if (lang === "cpp") {
-      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
-      statusDot.className = "status-dot ok";
-    }
     comments.forEach((c) => {
       const li = document.createElement("li");
       li.innerHTML = `<span class="text">${escapeHtml(c.text)}</span><span class="meta">${c.time}</span>`;
