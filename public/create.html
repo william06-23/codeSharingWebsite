@@ -283,7 +283,7 @@
 <!-- Editor + Output row -->
 <div class="editor-row">
   <div class="pane pane-editor">
-    <div class="pane-label">Editor <span class="pane-actions"><select id="language" class="lang-inline"><option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JS</option><option value="python">Python</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></span></div>
+    <div class="pane-label">Editor <span class="pane-actions"><select id="language" class="lang-inline"><option value="html">HTML</option><option value="python">Python</option><option value="cpp">C++</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></span></div>
     <div class="pane-body" id="editorContainer"></div>
   </div>
   <div class="pane pane-output">
@@ -311,6 +311,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -329,28 +330,18 @@
 </body>
 </html>`,
 
-    css: `body {
-  font-family: sans-serif;
-  padding: 40px;
-  background: #f0f0f0;
-}
-
-h1 {
-  color: #333;
-  text-align: center;
-}`,
-
-    javascript: `console.log("Hello, World!");
-
-for (let i = 1; i <= 5; i++) {
-  console.log("Line " + i);
-}`,
-
     python: `print("Hello, World!")
 
 for i in range(5):
     print(f"Line {i + 1}")`,
 
+    cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}`
   };
 
   // ── CodeMirror (editable) ──
@@ -370,7 +361,7 @@ for i in range(5):
   const output     = document.getElementById("output");
   const statusDot  = document.getElementById("statusDot");
 
-  const modeMap = { html: "htmlmixed", css: "css", javascript: "javascript", python: "python" };
+  const modeMap = { html: "htmlmixed", python: "python", cpp: "text/x-c++src" };
 
   // ── Language switch ──
   langSelect.addEventListener("change", () => {
@@ -416,17 +407,17 @@ for i in range(5):
 
     statusDot.className = "status-dot";
 
-    // Web languages — render in iframe
-    if (["html", "css", "javascript"].includes(lang)) {
-      let wrapped = code;
-      if (lang === "css") {
-        wrapped = `<html><head><style>${code}</style></head><body></body></html>`;
-      } else if (lang === "javascript") {
-        wrapped = `<html><body><script>${code}<\/script></body></html>`;
-      }
-      showIframe(wrapped);
+    // HTML — render in iframe
+    if (lang === "html") {
+      showIframe(code);
       statusDot.className = "status-dot ok";
       return;
+    }
+
+    // C++ — syntax only, not executable in browser
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
     }
 
     if (lang === "python") {
@@ -455,6 +446,12 @@ for i in range(5):
         statusDot.className = "status-dot err";
       }
       return;
+    }
+
+    // C++ — syntax only, not executable in browser
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
     }
 
   });
@@ -532,6 +529,12 @@ for i in range(5):
 
     if (!title) { alert("Please enter a title."); return; }
     if (!code)  { alert("Please enter some code."); return; }
+
+    // C++ — syntax only, not executable in browser
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
+    }
 
     // TODO: send to backend when ready
     alert(`"${title}" published! (${lang})\n\nBackend not yet connected — snippet stored in memory only.`);

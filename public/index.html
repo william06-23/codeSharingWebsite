@@ -403,6 +403,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -540,24 +541,27 @@ for i in range(5):
     const code = cm.getValue();
     const mode = cm.getOption("mode");
     const modeToLang = {
-      "htmlmixed": "html", "css": "css", "javascript": "javascript",
-      "python": "python"
+      "htmlmixed": "html",
+      "python": "python", "text/x-c++src": "cpp"
     };
     const lang = modeToLang[mode] || "html";
 
     statusDot.className = "status-dot";
 
-    // Web languages — render in iframe
-    if (["html", "css", "javascript"].includes(lang)) {
-      let wrapped = code;
-      if (lang === "css") {
-        wrapped = `<html><head><style>${code}</style></head><body></body></html>`;
+    // HTML — render in iframe
+    if (lang === "html") {
       } else if (lang === "javascript") {
         wrapped = `<html><body><script>${code}<\/script></body></html>`;
       }
-      showIframe(wrapped);
+      showIframe(code);
       statusDot.className = "status-dot ok";
       return;
+    }
+
+    // C++ — syntax only
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
     }
 
     if (lang === "python") {
@@ -588,6 +592,12 @@ for i in range(5):
       return;
     }
 
+    // C++ — syntax only
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
+    }
+
   });
 
   // Ctrl+Enter shortcut
@@ -610,6 +620,12 @@ for i in range(5):
       li.textContent = "No comments yet.";
       commentList.appendChild(li);
       return;
+    }
+
+    // C++ — syntax only
+    if (lang === "cpp") {
+      showText("C++ code displayed with syntax highlighting. Compile and run locally to execute.", false);
+      statusDot.className = "status-dot ok";
     }
     comments.forEach((c) => {
       const li = document.createElement("li");
