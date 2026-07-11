@@ -57,9 +57,7 @@
     /* ── 3-column layout ── */
     .layout {
       display: flex;
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 24px 16px 80px;
+      padding: 24px 24px 80px;
       gap: 24px;
     }
 
@@ -313,20 +311,16 @@
       position: fixed;
       bottom: 28px;
       right: 28px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
+      padding: 14px 24px;
+      border-radius: 28px;
       background: #cba6f7;
       color: #1e1e2e;
-      font-size: 1.5rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border: none;
       cursor: pointer;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       transition: background 0.2s, transform 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-decoration: none;
       z-index: 90;
     }
@@ -461,7 +455,7 @@
 </div>
 
 <!-- Floating create button -->
-<a href="/create.html" class="create-btn" title="Create new snippet">+</a>
+<a href="/create.html" class="create-btn">Create</a>
 
 <script>
   // ── Filter logic ──
