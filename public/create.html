@@ -33,7 +33,7 @@
     }
 
     .topbar .back-arrow {
-      color: #23307E;
+      color: #FF3D57;
       font-size: 1.3rem;
       text-decoration: none;
       font-weight: 700;
@@ -45,7 +45,7 @@
     .topbar .brand {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #23307E;
+      color: #FF3D57;
     }
 
     /* ── Page content wrapper ── */
@@ -58,7 +58,7 @@
     h1 {
       font-size: 1.25rem;
       font-weight: 600;
-      color: #23307E;
+      color: #FF3D57;
       margin-bottom: 12px;
     }
 
@@ -140,7 +140,7 @@
       border-radius: 4px;
       line-height: 1;
     }
-    .pane-label .expand-btn:hover { color: #23307E; border-color: #23307E; }
+    .pane-label .expand-btn:hover { color: #FF3D57; border-color: #FF3D57; }
 
     .pane-label .lang-inline {
       padding: 2px 6px;
@@ -154,7 +154,7 @@
       letter-spacing: 0.5px;
       cursor: pointer;
     }
-    .pane-label .lang-inline:hover { border-color: #23307E; color: #23307E; }
+    .pane-label .lang-inline:hover { border-color: #FF3D57; color: #FF3D57; }
 
     .pane-actions {
       margin-left: auto;
@@ -242,15 +242,15 @@
     }
 
     .controls-row button.run-btn {
-      background: #23307E;
-      color: #ffffff;
+      background: #FF3D57;
+      color: #7857AB;
       font-weight: 600;
       border: none;
     }
     .controls-row button.run-btn:hover { background: #23307E; }
 
     .controls-row button.publish-btn {
-      background: #23307E;
+      background: #FF3D57;
       color: #ffffff;
       font-weight: 600;
       border: none;
@@ -353,3 +353,183 @@ for i in range(5):
   const output     = document.getElementById("output");
   const statusDot  = document.getElementById("statusDot");
 
+  const modeMap = { html: "htmlmixed", python: "python" };
+
+  // ── Language switch ──
+  langSelect.addEventListener("change", () => {
+    const lang = langSelect.value;
+    cm.setOption("mode", modeMap[lang]);
+    const current = cm.getValue().trim();
+    if (!current || Object.values(defaults).some(d => current === d.trim())) {
+      cm.setValue(defaults[lang]);
+    }
+    clearOutput();
+  });
+
+  // ── Output helpers ──
+  function showIframe(htmlCode) {
+    output.innerHTML = "";
+    const iframe = document.createElement("iframe");
+    iframe.sandbox = "allow-scripts allow-same-origin";
+    iframe.srcdoc = htmlCode;
+    output.appendChild(iframe);
+  }
+
+  function showText(text, isError) {
+    output.innerHTML = "";
+    const pre = document.createElement("pre");
+    pre.className = "output-text" + (isError ? " error" : "");
+    pre.textContent = text || "No output.";
+    output.appendChild(pre);
+  }
+
+  function clearOutput() {
+    output.innerHTML = "";
+    statusDot.className = "status-dot";
+    const pre = document.createElement("pre");
+    pre.className = "output-text empty";
+    pre.textContent = "Click Run to see output.";
+    output.appendChild(pre);
+  }
+
+  // ── Run ──
+  runBtn.addEventListener("click", async () => {
+    const code = cm.getValue();
+    const lang = langSelect.value;
+
+    statusDot.className = "status-dot";
+
+    // HTML — render in iframe
+    if (lang === "html") {
+      showIframe(code);
+      statusDot.className = "status-dot ok";
+      return;
+    }
+
+    if (lang === "python") {
+      try {
+        const resp = await fetch("/api/run/python", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
+        const data = await resp.json();
+
+        const combined = [
+          data.output ? data.output.trimEnd() : "",
+          data.error  ? data.error.trimEnd()  : "",
+        ].filter(Boolean).join("\n");
+
+        if (data.error && !data.output) {
+          showText(combined, true);
+          statusDot.className = "status-dot err";
+        } else {
+          showText(combined, !!data.error);
+          statusDot.className = data.error ? "status-dot err" : "status-dot ok";
+        }
+      } catch {
+        showText("Failed to reach the server. Is it running?", true);
+        statusDot.className = "status-dot err";
+      }
+      return;
+    }
+
+  });
+
+  // Ctrl+Enter shortcut
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      runBtn.click();
+    }
+  });
+
+  // ── Expand toggles ──
+  const paneEditor   = document.querySelector(".pane-editor");
+  const paneOutput   = document.querySelector(".pane-output");
+  const editorRow    = document.querySelector(".editor-row");
+  const inlineEditor = document.getElementById("inlineEditor");
+  const inlineOutput = document.getElementById("inlineOutput");
+
+  inlineEditor.addEventListener("click", () => {
+    exitFullscreen();
+    editorRow.classList.toggle("expand-editor");
+    editorRow.classList.remove("expand-output");
+    cm.refresh();
+  });
+
+  inlineOutput.addEventListener("click", () => {
+    exitFullscreen();
+    editorRow.classList.toggle("expand-output");
+    editorRow.classList.remove("expand-editor");
+  });
+
+  function enterFullscreen(pane) {
+    editorRow.classList.remove("expand-editor", "expand-output");
+    pane.classList.add("fullscreen");
+    if (pane === paneEditor) cm.refresh();
+  }
+
+  function exitFullscreen() {
+    paneEditor.classList.remove("fullscreen");
+    paneOutput.classList.remove("fullscreen");
+    cm.refresh();
+  }
+
+  expandEditor.addEventListener("click", () => {
+    if (paneEditor.classList.contains("fullscreen")) {
+      exitFullscreen();
+    } else {
+      exitFullscreen();
+      enterFullscreen(paneEditor);
+    }
+  });
+
+  expandOutput.addEventListener("click", () => {
+    if (paneOutput.classList.contains("fullscreen")) {
+      exitFullscreen();
+    } else {
+      exitFullscreen();
+      enterFullscreen(paneOutput);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && (paneEditor.classList.contains("fullscreen") || paneOutput.classList.contains("fullscreen"))) {
+      exitFullscreen();
+    }
+  });
+
+  // ── Publish ──
+  document.getElementById("publishBtn").addEventListener("click", async () => {
+    const title = document.getElementById("titleInput").value.trim();
+    const desc  = document.getElementById("descInput").value.trim();
+    const code  = cm.getValue().trim();
+    const lang  = langSelect.value;
+
+    if (!title) { alert("Please enter a title."); return; }
+    if (!code)  { alert("Please enter some code."); return; }
+
+    try {
+      const resp = await fetch("/api/snippets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description: desc, code, language: lang }),
+      });
+      const data = await resp.json();
+      if (data.id) {
+        alert("Published successfully!");
+        window.location.href = "/main.html";
+      } else {
+        alert("Publish failed. Check the database connection.");
+      }
+    } catch {
+      alert("Failed to reach the server.");
+    }
+  });
+
+  // Init
+  clearOutput();
+</script>
+</body>
+</html>

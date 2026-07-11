@@ -385,66 +385,7 @@
       </select>
     </div>
 
-    <a href="/index.html" class="work-card" data-lang="html">
-      <div class="card-top">
-        <span class="lang-badge">HTML</span>
-        <span class="title">Hello World Demo</span>
-      </div>
-      <div class="desc">A simple HTML page that displays a greeting message with styled text and a smooth fade-in animation.</div>
-      <div class="card-footer">
-        <span>Created Jul 10</span><span class="dot"></span><span>Updated Jul 11</span>
-        <span class="views">👁 124</span>
-      </div>
-    </a>
-
-    <a href="/index.html" class="work-card" data-lang="python">
-      <div class="card-top">
-        <span class="lang-badge">Python</span>
-        <span class="title">Python Loop Example</span>
-      </div>
-      <div class="desc">Demonstrates basic for-loops, list comprehensions, and f-string formatting in Python.</div>
-      <div class="card-footer">
-        <span>Created Jul 9</span><span class="dot"></span><span>Updated Jul 10</span>
-        <span class="views">👁 98</span>
-      </div>
-    </a>
-
-    <a href="/index.html" class="work-card" data-lang="html">
-      <div class="card-top">
-        <span class="lang-badge">HTML</span>
-        <span class="title">CSS Flexbox Layout</span>
-      </div>
-      <div class="desc">A responsive layout built entirely with CSS Flexbox. Includes a navbar, sidebar, and content area.</div>
-      <div class="card-footer">
-        <span>Created Jul 8</span><span class="dot"></span><span>Updated Jul 8</span>
-        <span class="views">👁 87</span>
-      </div>
-    </a>
-
-    <a href="/index.html" class="work-card" data-lang="python">
-      <div class="card-top">
-        <span class="lang-badge">Python</span>
-        <span class="title">Recursive Fibonacci</span>
-      </div>
-      <div class="desc">Computes Fibonacci numbers recursively with memoization for O(n) performance.</div>
-      <div class="card-footer">
-        <span>Created Jul 7</span><span class="dot"></span><span>Updated Jul 11</span>
-        <span class="views">👁 203</span>
-      </div>
-    </a>
-
-    <a href="/index.html" class="work-card" data-lang="html">
-      <div class="card-top">
-        <span class="lang-badge">HTML</span>
-        <span class="title">To-Do List App</span>
-      </div>
-      <div class="desc">A minimal to-do list with add, check-off, and delete functionality using vanilla JavaScript.</div>
-      <div class="card-footer">
-        <span>Created Jul 5</span><span class="dot"></span><span>Updated Jul 6</span>
-        <span class="views">👁 156</span>
-      </div>
-    </a>
-
+    <div id="feedContainer"></div>
 
   </main>
 
@@ -478,40 +419,49 @@
 <a href="/create.html" class="create-btn">Create</a>
 
 <script>
-  // ── Filter logic ──
-  const filterItems = document.querySelectorAll(".filter-list li");
-  const cards = document.querySelectorAll(".work-card");
+  const feedContainer = document.getElementById("feedContainer");
+  let allCards = [];
 
-  filterItems.forEach(item => {
-    item.addEventListener("click", () => {
-      filterItems.forEach(i => i.classList.remove("active"));
-      item.classList.add("active");
+  async function loadSnippets() {
+    try {
+      const resp = await fetch("/api/snippets");
+      const snippets = await resp.json();
+      if (!Array.isArray(snippets)) return;
+      feedContainer.innerHTML = "";
+      allCards = [];
 
-      const filter = item.dataset.filter;
-
-      cards.forEach(card => {
-        if (filter === "all" || card.dataset.lang === filter) {
-          card.style.display = "";
-        } else {
-          card.style.display = "none";
-        }
+      snippets.forEach(s => {
+        const card = document.createElement("a");
+        card.href = "/index.html";
+        card.className = "work-card";
+        card.dataset.lang = s.language;
+        card.innerHTML = '<div class="card-top"><span class="lang-badge">' + s.language.toUpperCase() + '</span><span class="title">' + escapeHtml(s.title) + '</span></div><div class="desc">' + escapeHtml(s.description || "No description.") + '</div><div class="card-footer"><span>Created ' + fmtDate(s.created_at) + '</span><span class="dot"></span><span>Updated ' + fmtDate(s.updated_at) + '</span></div>';
+        feedContainer.appendChild(card);
+        allCards.push(card);
       });
-    });
-  });
+      updateFilterCounts(snippets);
+    } catch { feedContainer.innerHTML = '<p style="color:#b0a89a;padding:20px;">Could not load snippets.</p>'; }
+  }
 
-  // ── Unified filter + search ──
-  const searchBar = document.getElementById("searchBar");
-  let activeFilter = "all";
+  function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+  function fmtDate(d) { return d ? new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""; }
 
-  filterItems.forEach(item => {
-    // Remove old inline handler — replace with unified one
-    item.replaceWith(item.cloneNode(true));
-  });
+  function updateFilterCounts(snippets) {
+    const total = snippets.length;
+    const html = snippets.filter(function(s) { return s.language === "html"; }).length;
+    const py = snippets.filter(function(s) { return s.language === "python"; }).length;
+    var counts = document.querySelectorAll(".filter-list .count");
+    if (counts[0]) counts[0].textContent = total;
+    if (counts[1]) counts[1].textContent = html;
+    if (counts[2]) counts[2].textContent = py;
+  }
 
-  // Re-query after clone
-  document.querySelectorAll(".filter-list li").forEach(item => {
-    item.addEventListener("click", () => {
-      document.querySelectorAll(".filter-list li").forEach(i => i.classList.remove("active"));
+  var searchBar = document.getElementById("searchBar");
+  var activeFilter = "all";
+
+  document.querySelectorAll(".filter-list li").forEach(function(item) {
+    item.addEventListener("click", function() {
+      document.querySelectorAll(".filter-list li").forEach(function(i) { i.classList.remove("active"); });
       item.classList.add("active");
       activeFilter = item.dataset.filter;
       applyFilters();
@@ -521,15 +471,15 @@
   searchBar.addEventListener("input", applyFilters);
 
   function applyFilters() {
-    const query = searchBar.value.toLowerCase();
-    cards.forEach(card => {
-      const langMatch = activeFilter === "all" || card.dataset.lang === activeFilter;
-      const textMatch = !query
-        || card.querySelector(".title").textContent.toLowerCase().includes(query)
-        || card.querySelector(".desc").textContent.toLowerCase().includes(query);
+    var query = searchBar.value.toLowerCase();
+    allCards.forEach(function(card) {
+      var langMatch = activeFilter === "all" || card.dataset.lang === activeFilter;
+      var textMatch = !query || card.querySelector(".title").textContent.toLowerCase().indexOf(query) !== -1 || card.querySelector(".desc").textContent.toLowerCase().indexOf(query) !== -1;
       card.style.display = langMatch && textMatch ? "" : "none";
     });
   }
+
+  loadSnippets();
 </script>
 
 </body>
