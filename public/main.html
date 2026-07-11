@@ -30,7 +30,23 @@
       font-size: 1.15rem;
       font-weight: 700;
       color: #cba6f7;
+      margin-right: 24px;
     }
+
+    .topbar .search-bar {
+      flex: 0 1 400px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid #45475a;
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .topbar .search-bar::placeholder { color: #6c7086; }
+    .topbar .search-bar:focus { border-color: #cba6f7; }
 
     .topbar .spacer { flex: 1; }
 
@@ -341,6 +357,7 @@
 
 <header class="topbar">
   <span class="brand">NewCode</span>
+  <input type="text" class="search-bar" id="searchBar" placeholder="Search snippets…">
   <span class="spacer"></span>
   <button class="auth-btn">Log In</button>
   <button class="auth-btn primary">Sign Up</button>
@@ -479,6 +496,38 @@
       });
     });
   });
+
+  // ── Unified filter + search ──
+  const searchBar = document.getElementById("searchBar");
+  let activeFilter = "all";
+
+  filterItems.forEach(item => {
+    // Remove old inline handler — replace with unified one
+    item.replaceWith(item.cloneNode(true));
+  });
+
+  // Re-query after clone
+  document.querySelectorAll(".filter-list li").forEach(item => {
+    item.addEventListener("click", () => {
+      document.querySelectorAll(".filter-list li").forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+      activeFilter = item.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  searchBar.addEventListener("input", applyFilters);
+
+  function applyFilters() {
+    const query = searchBar.value.toLowerCase();
+    cards.forEach(card => {
+      const langMatch = activeFilter === "all" || card.dataset.lang === activeFilter;
+      const textMatch = !query
+        || card.querySelector(".title").textContent.toLowerCase().includes(query)
+        || card.querySelector(".desc").textContent.toLowerCase().includes(query);
+      card.style.display = langMatch && textMatch ? "" : "none";
+    });
+  }
 </script>
 
 </body>
