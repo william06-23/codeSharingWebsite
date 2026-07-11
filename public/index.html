@@ -403,6 +403,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -538,12 +542,25 @@ for i in range(5):
   // ── Run ──
   runBtn.addEventListener("click", async () => {
     const code = cm.getValue();
-    const lang = cm.getOption("mode") === "python" ? "python" : "html";
+    const mode = cm.getOption("mode");
+    const modeToLang = {
+      "htmlmixed": "html", "css": "css", "javascript": "javascript",
+      "python": "python", "text/x-csrc": "c", "text/x-c++src": "cpp",
+      "text/x-java": "java", "go": "go", "rust": "rust", "text/x-sql": "sql"
+    };
+    const lang = modeToLang[mode] || "html";
 
     statusDot.className = "status-dot";
 
-    if (lang === "html") {
-      showIframe(code);
+    // Web languages — render in iframe
+    if (["html", "css", "javascript"].includes(lang)) {
+      let wrapped = code;
+      if (lang === "css") {
+        wrapped = `<html><head><style>${code}</style></head><body></body></html>`;
+      } else if (lang === "javascript") {
+        wrapped = `<html><body><script>${code}<\/script></body></html>`;
+      }
+      showIframe(wrapped);
       statusDot.className = "status-dot ok";
       return;
     }
@@ -573,7 +590,12 @@ for i in range(5):
         showText("Failed to reach the server. Is it running?", true);
         statusDot.className = "status-dot err";
       }
+      return;
     }
+
+    // Compiled languages — syntax-only
+    showText("Syntax highlighting supported. Execution is not available in the browser.", false);
+    statusDot.className = "status-dot ok";
   });
 
   // Ctrl+Enter shortcut
