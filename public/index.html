@@ -403,10 +403,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -545,8 +541,7 @@ for i in range(5):
     const mode = cm.getOption("mode");
     const modeToLang = {
       "htmlmixed": "html", "css": "css", "javascript": "javascript",
-      "python": "python", "text/x-csrc": "c", "text/x-c++src": "cpp",
-      "text/x-java": "java", "go": "go", "rust": "rust", "text/x-sql": "sql"
+      "python": "python"
     };
     const lang = modeToLang[mode] || "html";
 
@@ -593,9 +588,6 @@ for i in range(5):
       return;
     }
 
-    // Compiled languages — syntax-only
-    showText("Syntax highlighting supported. Execution is not available in the browser.", false);
-    statusDot.className = "status-dot ok";
   });
 
   // Ctrl+Enter shortcut

@@ -283,7 +283,7 @@
 <!-- Editor + Output row -->
 <div class="editor-row">
   <div class="pane pane-editor">
-    <div class="pane-label">Editor <span class="pane-actions"><select id="language" class="lang-inline"><option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JS</option><option value="python">Python</option><option value="c">C</option><option value="cpp">C++</option><option value="java">Java</option><option value="go">Go</option><option value="rust">Rust</option><option value="sql">SQL</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></span></div>
+    <div class="pane-label">Editor <span class="pane-actions"><select id="language" class="lang-inline"><option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JS</option><option value="python">Python</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></span></div>
     <div class="pane-body" id="editorContainer"></div>
   </div>
   <div class="pane pane-output">
@@ -311,10 +311,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
 
 <script>
   // ── Default snippets ──
@@ -355,40 +351,6 @@ for (let i = 1; i <= 5; i++) {
 for i in range(5):
     print(f"Line {i + 1}")`,
 
-    c: `#include <stdio.h>
-
-int main() {
-    printf("Hello, World!\\n");
-    return 0;
-}`,
-
-    cpp: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    return 0;
-}`,
-
-    java: `public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}`,
-
-    go: `package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-}`,
-
-    rust: `fn main() {
-    println!("Hello, World!");
-}`,
-
-    sql: `SELECT 'Hello, World!' AS greeting;`
   };
 
   // ── CodeMirror (editable) ──
@@ -408,11 +370,7 @@ func main() {
   const output     = document.getElementById("output");
   const statusDot  = document.getElementById("statusDot");
 
-  const modeMap = {
-    html: "htmlmixed", css: "css", javascript: "javascript",
-    python: "python", c: "text/x-csrc", cpp: "text/x-c++src",
-    java: "text/x-java", go: "go", rust: "rust", sql: "text/x-sql"
-  };
+  const modeMap = { html: "htmlmixed", css: "css", javascript: "javascript", python: "python" };
 
   // ── Language switch ──
   langSelect.addEventListener("change", () => {
@@ -499,9 +457,6 @@ func main() {
       return;
     }
 
-    // Compiled languages — syntax-only, no execution
-    showText("Syntax highlighting supported. Execution for " + langSelect.options[langSelect.selectedIndex].text + " is not available in the browser.", false);
-    statusDot.className = "status-dot ok";
   });
 
   // Ctrl+Enter shortcut
