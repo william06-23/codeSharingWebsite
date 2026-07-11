@@ -9,8 +9,8 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f8f9fa;
-      color: #1f1f2e;
+      background: #F2EADF;
+      color: #23307E;
       min-height: 100vh;
     }
 
@@ -19,8 +19,8 @@
       display: flex;
       align-items: center;
       padding: 10px 24px;
-      background: #f0f0f3;
-      border-bottom: 1px solid #d4d4d8;
+      background: #e8e2d6;
+      border-bottom: 1px solid #e5e0d8;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -29,7 +29,7 @@
     .topbar .brand {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #cba6f7;
+      color: #FF3D57;
       margin-right: 24px;
     }
 
@@ -37,38 +37,38 @@
       flex: 0 1 400px;
       padding: 8px 14px;
       border-radius: 20px;
-      border: 1px solid #c4c4cc;
-      background: #f8f9fa;
-      color: #1f1f2e;
+      border: 1px solid #d5cfc6;
+      background: #F2EADF;
+      color: #23307E;
       font-size: 0.85rem;
       font-family: inherit;
       outline: none;
       transition: border-color 0.2s;
     }
-    .topbar .search-bar::placeholder { color: #8e8ea0; }
-    .topbar .search-bar:focus { border-color: #cba6f7; }
+    .topbar .search-bar::placeholder { color: #b0a89a; }
+    .topbar .search-bar:focus { border-color: #FF3D57; }
 
     .topbar .spacer { flex: 1; }
 
     .topbar .auth-btn {
       padding: 6px 14px;
       border-radius: 6px;
-      border: 1px solid #c4c4cc;
-      background: #d4d4d8;
-      color: #1f1f2e;
+      border: 1px solid #d5cfc6;
+      background: #e5e0d8;
+      color: #23307E;
       font-size: 0.8rem;
       cursor: pointer;
       margin-left: 8px;
     }
 
     .topbar .auth-btn.primary {
-      background: #cba6f7;
-      color: #1f1f2e;
+      background: #FF3D57;
+      color: #23307E;
       border: none;
       font-weight: 600;
     }
-    .topbar .auth-btn.primary:hover { background: #b4befe; }
-    .topbar .auth-btn:hover { border-color: #cba6f7; }
+    .topbar .auth-btn.primary:hover { background: #7857AB; }
+    .topbar .auth-btn:hover { border-color: #FF3D57; }
 
     /* ── 3-column layout ── */
     .layout {
@@ -91,7 +91,7 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: #8e8ea0;
+      color: #b0a89a;
       margin-bottom: 12px;
     }
 
@@ -107,29 +107,29 @@
       border-radius: 8px;
       font-size: 0.9rem;
       cursor: pointer;
-      color: #585b70;
+      color: #5a4e7a;
       transition: background 0.15s;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .filter-list li:hover { background: #d4d4d8; }
+    .filter-list li:hover { background: #e5e0d8; }
     .filter-list li.active {
-      background: #d4d4d8;
-      color: #cba6f7;
+      background: #e5e0d8;
+      color: #FF3D57;
       font-weight: 600;
     }
 
     .filter-list .count {
       margin-left: auto;
       font-size: 0.7rem;
-      color: #8e8ea0;
-      background: #f8f9fa;
+      color: #b0a89a;
+      background: #F2EADF;
       padding: 1px 7px;
       border-radius: 10px;
     }
-    .filter-list li.active .count { background: #c4c4cc; color: #cba6f7; }
+    .filter-list li.active .count { background: #d5cfc6; color: #FF3D57; }
 
     /* ── Center feed ── */
     .feed {
@@ -150,27 +150,27 @@
     .feed-header h2 {
       font-size: 1.4rem;
       font-weight: 700;
-      color: #cba6f7;
+      color: #FF3D57;
     }
 
     .feed-header .sort-select {
       margin-left: auto;
       padding: 6px 12px;
       border-radius: 8px;
-      border: 1px solid #c4c4cc;
-      background: #d4d4d8;
-      color: #1f1f2e;
+      border: 1px solid #d5cfc6;
+      background: #e5e0d8;
+      color: #23307E;
       font-size: 0.85rem;
       cursor: pointer;
     }
 
     .work-card {
       background: #ffffff;
-      border: 1px solid #d4d4d8;
+      border: 1px solid #e5e0d8;
       border-radius: 14px;
       padding: 24px 28px;
       text-decoration: none;
-      color: #1f1f2e;
+      color: #23307E;
       transition: border-color 0.2s, transform 0.12s;
       display: flex;
       flex-direction: column;
@@ -178,7 +178,7 @@
     }
 
     .work-card:hover {
-      border-color: #cba6f7;
+      border-color: #FF3D57;
       transform: translateY(-1px);
     }
 
@@ -195,21 +195,21 @@
       letter-spacing: 0.5px;
       padding: 4px 10px;
       border-radius: 5px;
-      background: #d4d4d8;
-      color: #cba6f7;
+      background: #e5e0d8;
+      color: #FF3D57;
       flex-shrink: 0;
     }
 
     .work-card .title {
       font-size: 1.1rem;
       font-weight: 600;
-      color: #1f1f2e;
+      color: #23307E;
       line-height: 1.3;
     }
 
     .work-card .desc {
       font-size: 0.9rem;
-      color: #585b70;
+      color: #5a4e7a;
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -222,12 +222,12 @@
       align-items: center;
       gap: 16px;
       font-size: 0.78rem;
-      color: #8e8ea0;
+      color: #b0a89a;
     }
 
     .work-card .card-footer .dot {
       width: 4px; height: 4px;
-      background: #585b70;
+      background: #5a4e7a;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -252,7 +252,7 @@
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: #8e8ea0;
+      color: #b0a89a;
       margin-bottom: 12px;
     }
 
@@ -268,19 +268,19 @@
       border-radius: 8px;
       font-size: 0.88rem;
       cursor: pointer;
-      color: #585b70;
+      color: #5a4e7a;
       transition: background 0.15s;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .trending-list li:hover { background: #d4d4d8; }
+    .trending-list li:hover { background: #e5e0d8; }
 
     .trending-list .rank {
       font-size: 0.85rem;
       font-weight: 700;
-      color: #cba6f7;
+      color: #FF3D57;
       width: 22px;
       text-align: center;
     }
@@ -294,7 +294,7 @@
 
     .trending-list .info .name {
       font-size: 0.85rem;
-      color: #1f1f2e;
+      color: #23307E;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -302,7 +302,7 @@
 
     .trending-list .info .meta {
       font-size: 0.65rem;
-      color: #8e8ea0;
+      color: #b0a89a;
     }
 
     .sidebar-right .tag-cloud {
@@ -316,12 +316,12 @@
       padding: 5px 14px;
       border-radius: 14px;
       font-size: 0.78rem;
-      background: #d4d4d8;
-      color: #585b70;
+      background: #e5e0d8;
+      color: #5a4e7a;
       cursor: pointer;
       transition: background 0.15s;
     }
-    .sidebar-right .tag:hover { background: #c4c4cc; color: #1f1f2e; }
+    .sidebar-right .tag:hover { background: #d5cfc6; color: #23307E; }
 
     /* ── Floating create button ── */
     .create-btn {
@@ -330,8 +330,8 @@
       right: 60px;
       padding: 16px 36px;
       border-radius: 32px;
-      background: #cba6f7;
-      color: #1f1f2e;
+      background: #FF3D57;
+      color: #23307E;
       font-size: 1.05rem;
       font-weight: 700;
       border: none;
@@ -342,7 +342,7 @@
       z-index: 90;
     }
     .create-btn:hover {
-      background: #b4befe;
+      background: #7857AB;
       transform: scale(1.05);
     }
 

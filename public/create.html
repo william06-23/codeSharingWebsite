@@ -13,8 +13,8 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f8f9fa;
-      color: #1f1f2e;
+      background: #F2EADF;
+      color: #23307E;
       padding: 0;
       margin: 0;
     }
@@ -25,27 +25,27 @@
       align-items: center;
       gap: 12px;
       padding: 10px 20px;
-      background: #f0f0f3;
-      border-bottom: 1px solid #d4d4d8;
+      background: #e8e2d6;
+      border-bottom: 1px solid #e5e0d8;
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
     .topbar .back-arrow {
-      color: #cba6f7;
+      color: #FF3D57;
       font-size: 1.3rem;
       text-decoration: none;
       font-weight: 700;
       line-height: 1;
       padding: 2px 6px;
     }
-    .topbar .back-arrow:hover { color: #b4befe; }
+    .topbar .back-arrow:hover { color: #7857AB; }
 
     .topbar .brand {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #cba6f7;
+      color: #FF3D57;
     }
 
     /* ── Page content wrapper ── */
@@ -58,7 +58,7 @@
     h1 {
       font-size: 1.25rem;
       font-weight: 600;
-      color: #cba6f7;
+      color: #FF3D57;
       margin-bottom: 12px;
     }
 
@@ -72,7 +72,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #585b70;
+      color: #5a4e7a;
       margin-bottom: 4px;
     }
 
@@ -81,15 +81,15 @@
       width: 100%;
       padding: 8px 12px;
       border-radius: 6px;
-      border: 1px solid #c4c4cc;
-      background: #f0f0f3;
-      color: #1f1f2e;
+      border: 1px solid #d5cfc6;
+      background: #e8e2d6;
+      color: #23307E;
       font-size: 0.85rem;
       font-family: inherit;
     }
 
     .field input::placeholder,
-    .field textarea::placeholder { color: #8e8ea0; }
+    .field textarea::placeholder { color: #b0a89a; }
 
     .field textarea {
       resize: vertical;
@@ -106,7 +106,7 @@
 
     .pane {
       background: #ffffff;
-      border: 1px solid #d4d4d8;
+      border: 1px solid #e5e0d8;
       border-radius: 8px;
       display: flex;
       flex-direction: column;
@@ -120,10 +120,10 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #585b70;
+      color: #5a4e7a;
       padding: 6px 12px;
-      background: #f0f0f3;
-      border-bottom: 1px solid #d4d4d8;
+      background: #e8e2d6;
+      border-bottom: 1px solid #e5e0d8;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -132,29 +132,29 @@
 
     .pane-label .expand-btn {
       background: none;
-      border: 1px solid #c4c4cc;
-      color: #585b70;
+      border: 1px solid #d5cfc6;
+      color: #5a4e7a;
       cursor: pointer;
       font-size: 0.85rem;
       padding: 2px 6px;
       border-radius: 4px;
       line-height: 1;
     }
-    .pane-label .expand-btn:hover { color: #cba6f7; border-color: #cba6f7; }
+    .pane-label .expand-btn:hover { color: #FF3D57; border-color: #FF3D57; }
 
     .pane-label .lang-inline {
       padding: 2px 6px;
       border-radius: 4px;
-      border: 1px solid #c4c4cc;
-      background: #f0f0f3;
-      color: #585b70;
+      border: 1px solid #d5cfc6;
+      background: #e8e2d6;
+      color: #5a4e7a;
       font-size: 0.65rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       cursor: pointer;
     }
-    .pane-label .lang-inline:hover { border-color: #cba6f7; color: #cba6f7; }
+    .pane-label .lang-inline:hover { border-color: #FF3D57; color: #FF3D57; }
 
     .pane-actions {
       margin-left: auto;
@@ -208,18 +208,18 @@
       font-family: "JetBrains Mono", "Fira Code", monospace;
       font-size: 13px;
       white-space: pre-wrap;
-      color: #1f1f2e;
+      color: #23307E;
     }
     .output-text.error { color: #f38ba8; }
-    .output-text.empty  { color: #8e8ea0; font-style: italic; }
+    .output-text.empty  { color: #b0a89a; font-style: italic; }
 
     .status-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      background: #8e8ea0;
+      background: #b0a89a;
       flex-shrink: 0;
     }
-    .status-dot.ok  { background: #a6e3a1; }
+    .status-dot.ok  { background: #7857AB; }
     .status-dot.err { background: #f38ba8; }
 
     /* ── Controls row ── */
@@ -234,29 +234,29 @@
     .controls-row button {
       padding: 6px 14px;
       border-radius: 6px;
-      border: 1px solid #c4c4cc;
-      background: #d4d4d8;
-      color: #1f1f2e;
+      border: 1px solid #d5cfc6;
+      background: #e5e0d8;
+      color: #23307E;
       font-size: 0.85rem;
       cursor: pointer;
     }
 
     .controls-row button.run-btn {
-      background: #cba6f7;
-      color: #1f1f2e;
+      background: #FF3D57;
+      color: #23307E;
       font-weight: 600;
       border: none;
     }
-    .controls-row button.run-btn:hover { background: #b4befe; }
+    .controls-row button.run-btn:hover { background: #7857AB; }
 
     .controls-row button.publish-btn {
-      background: #a6e3a1;
-      color: #1f1f2e;
+      background: #7857AB;
+      color: #23307E;
       font-weight: 600;
       border: none;
       padding: 6px 22px;
     }
-    .controls-row button.publish-btn:hover { background: #94e2d5; }
+    .controls-row button.publish-btn:hover { background: #9b7cc9; }
   </style>
 </head>
 <body>
