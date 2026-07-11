@@ -18,13 +18,16 @@
     .topbar {
       display: flex;
       align-items: center;
-      padding: 10px 20px;
+      padding: 10px 24px;
       background: #11111b;
       border-bottom: 1px solid #313244;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .topbar .brand {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #cba6f7;
     }
@@ -51,45 +54,109 @@
     .topbar .auth-btn.primary:hover { background: #b4befe; }
     .topbar .auth-btn:hover { border-color: #cba6f7; }
 
-    /* ── Page heading ── */
-    .page-head {
-      padding: 24px 32px 0;
-      max-width: 1200px;
+    /* ── 3-column layout ── */
+    .layout {
+      display: flex;
+      max-width: 1300px;
       margin: 0 auto;
-      width: 100%;
+      padding: 24px 16px 80px;
+      gap: 24px;
     }
 
-    .page-head h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
+    /* ── Left sidebar: filters ── */
+    .sidebar-left {
+      width: 180px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 60px;
+      align-self: flex-start;
+    }
+
+    .sidebar-left h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #6c7086;
+      margin-bottom: 10px;
+    }
+
+    .filter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .filter-list li {
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: #a6adc8;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-list li:hover { background: #313244; }
+    .filter-list li.active {
+      background: #313244;
       color: #cba6f7;
+      font-weight: 600;
+    }
+
+    .filter-list .count {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: #6c7086;
+      background: #1e1e2e;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+    .filter-list li.active .count { background: #45475a; color: #cba6f7; }
+
+    /* ── Center feed ── */
+    .feed {
+      flex: 1;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feed-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 4px;
     }
 
-    .page-head p {
-      font-size: 0.85rem;
-      color: #6c7086;
+    .feed-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #cba6f7;
     }
 
-    /* ── Work grid ── */
-    .work-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
-      padding: 24px 32px 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
+    .feed-header .sort-select {
+      margin-left: auto;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #45475a;
+      background: #313244;
+      color: #cdd6f4;
+      font-size: 0.75rem;
+      cursor: pointer;
     }
 
     .work-card {
       background: #181825;
       border: 1px solid #313244;
-      border-radius: 10px;
-      padding: 18px 20px;
+      border-radius: 12px;
+      padding: 20px 24px;
       text-decoration: none;
       color: #cdd6f4;
-      transition: border-color 0.2s, transform 0.15s;
+      transition: border-color 0.2s, transform 0.12s;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -97,7 +164,25 @@
 
     .work-card:hover {
       border-color: #cba6f7;
-      transform: translateY(-2px);
+      transform: translateY(-1px);
+    }
+
+    .work-card .card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .work-card .lang-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #313244;
+      color: #cba6f7;
+      flex-shrink: 0;
     }
 
     .work-card .title {
@@ -108,47 +193,120 @@
     }
 
     .work-card .desc {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #a6adc8;
-      line-height: 1.4;
+      line-height: 1.45;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    .work-card .lang-badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: #313244;
-      color: #cba6f7;
+    .work-card .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.7rem;
+      color: #6c7086;
+    }
+
+    .work-card .card-footer .dot {
+      width: 4px; height: 4px;
+      background: #585b70;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .work-card .card-footer .views {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── Right sidebar: trending ── */
+    .sidebar-right {
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 60px;
       align-self: flex-start;
     }
 
-    .work-card .times {
-      display: flex;
-      gap: 20px;
+    .sidebar-right h3 {
       font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
       color: #6c7086;
-      margin-top: auto;
+      margin-bottom: 10px;
     }
 
-    .work-card .times span {
+    .trending-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .trending-list li {
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #a6adc8;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trending-list li:hover { background: #313244; }
+
+    .trending-list .rank {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #cba6f7;
+      width: 18px;
+      text-align: center;
+    }
+
+    .trending-list .info {
       display: flex;
       flex-direction: column;
       gap: 1px;
+      min-width: 0;
     }
 
-    .work-card .times .label {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+    .trending-list .info .name {
+      font-size: 0.8rem;
+      color: #cdd6f4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
+    .trending-list .info .meta {
+      font-size: 0.65rem;
+      color: #6c7086;
+    }
+
+    .sidebar-right .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .sidebar-right .tag {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      background: #313244;
+      color: #a6adc8;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sidebar-right .tag:hover { background: #45475a; color: #cdd6f4; }
 
     /* ── Floating create button ── */
     .create-btn {
@@ -170,11 +328,17 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
+      z-index: 90;
     }
-
     .create-btn:hover {
       background: #b4befe;
       transform: scale(1.05);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar-left, .sidebar-right { display: none; }
+      .feed { max-width: 100%; }
     }
   </style>
 </head>
@@ -187,66 +351,140 @@
   <button class="auth-btn primary">Sign Up</button>
 </header>
 
-<div class="page-head">
-  <h1>Explore</h1>
-  <p>Discover code snippets shared by the community</p>
-</div>
+<div class="layout">
 
-<div class="work-grid">
-  <!-- Sample works — replace with real data later -->
-  <a href="/index.html" class="work-card">
-    <div class="title">Hello World Demo</div>
-    <div class="desc">A simple HTML page that displays a greeting message with styled text.</div>
-    <span class="lang-badge">HTML</span>
-    <div class="times">
-      <span><span class="label">Created</span>Jul 10, 2026</span>
-      <span><span class="label">Updated</span>Jul 11, 2026</span>
-    </div>
-  </a>
+  <!-- ── Left: Filters ── -->
+  <aside class="sidebar-left">
+    <h3>Language</h3>
+    <ul class="filter-list">
+      <li class="active" data-filter="all">All <span class="count">5</span></li>
+      <li data-filter="html">HTML <span class="count">3</span></li>
+      <li data-filter="python">Python <span class="count">2</span></li>
+    </ul>
+  </aside>
 
-  <a href="/index.html" class="work-card">
-    <div class="title">Python Loop Example</div>
-    <div class="desc">Demonstrates basic for-loops and f-string formatting in Python.</div>
-    <span class="lang-badge">Python</span>
-    <div class="times">
-      <span><span class="label">Created</span>Jul 9, 2026</span>
-      <span><span class="label">Updated</span>Jul 10, 2026</span>
+  <!-- ── Center: Feed ── -->
+  <main class="feed">
+    <div class="feed-header">
+      <h2>Explore</h2>
+      <select class="sort-select">
+        <option value="recent">Most Recent</option>
+        <option value="popular">Most Popular</option>
+      </select>
     </div>
-  </a>
 
-  <a href="/index.html" class="work-card">
-    <div class="title">CSS Flexbox Layout</div>
-    <div class="desc">A responsive layout built entirely with CSS Flexbox. Includes a navbar, sidebar, and content area.</div>
-    <span class="lang-badge">HTML</span>
-    <div class="times">
-      <span><span class="label">Created</span>Jul 8, 2026</span>
-      <span><span class="label">Updated</span>Jul 8, 2026</span>
-    </div>
-  </a>
+    <a href="/index.html" class="work-card" data-lang="html">
+      <div class="card-top">
+        <span class="lang-badge">HTML</span>
+        <span class="title">Hello World Demo</span>
+      </div>
+      <div class="desc">A simple HTML page that displays a greeting message with styled text and a smooth fade-in animation.</div>
+      <div class="card-footer">
+        <span>Created Jul 10</span><span class="dot"></span><span>Updated Jul 11</span>
+        <span class="views">👁 124</span>
+      </div>
+    </a>
 
-  <a href="/index.html" class="work-card">
-    <div class="title">Recursive Fibonacci</div>
-    <div class="desc">Computes Fibonacci numbers recursively with memoization for efficiency.</div>
-    <span class="lang-badge">Python</span>
-    <div class="times">
-      <span><span class="label">Created</span>Jul 7, 2026</span>
-      <span><span class="label">Updated</span>Jul 11, 2026</span>
-    </div>
-  </a>
+    <a href="/index.html" class="work-card" data-lang="python">
+      <div class="card-top">
+        <span class="lang-badge">Python</span>
+        <span class="title">Python Loop Example</span>
+      </div>
+      <div class="desc">Demonstrates basic for-loops, list comprehensions, and f-string formatting in Python.</div>
+      <div class="card-footer">
+        <span>Created Jul 9</span><span class="dot"></span><span>Updated Jul 10</span>
+        <span class="views">👁 98</span>
+      </div>
+    </a>
 
-  <a href="/index.html" class="work-card">
-    <div class="title">To-Do List App</div>
-    <div class="desc">A minimal to-do list with add, check-off, and delete functionality using vanilla JS.</div>
-    <span class="lang-badge">HTML</span>
-    <div class="times">
-      <span><span class="label">Created</span>Jul 5, 2026</span>
-      <span><span class="label">Updated</span>Jul 6, 2026</span>
+    <a href="/index.html" class="work-card" data-lang="html">
+      <div class="card-top">
+        <span class="lang-badge">HTML</span>
+        <span class="title">CSS Flexbox Layout</span>
+      </div>
+      <div class="desc">A responsive layout built entirely with CSS Flexbox. Includes a navbar, sidebar, and content area.</div>
+      <div class="card-footer">
+        <span>Created Jul 8</span><span class="dot"></span><span>Updated Jul 8</span>
+        <span class="views">👁 87</span>
+      </div>
+    </a>
+
+    <a href="/index.html" class="work-card" data-lang="python">
+      <div class="card-top">
+        <span class="lang-badge">Python</span>
+        <span class="title">Recursive Fibonacci</span>
+      </div>
+      <div class="desc">Computes Fibonacci numbers recursively with memoization for O(n) performance.</div>
+      <div class="card-footer">
+        <span>Created Jul 7</span><span class="dot"></span><span>Updated Jul 11</span>
+        <span class="views">👁 203</span>
+      </div>
+    </a>
+
+    <a href="/index.html" class="work-card" data-lang="html">
+      <div class="card-top">
+        <span class="lang-badge">HTML</span>
+        <span class="title">To-Do List App</span>
+      </div>
+      <div class="desc">A minimal to-do list with add, check-off, and delete functionality using vanilla JavaScript.</div>
+      <div class="card-footer">
+        <span>Created Jul 5</span><span class="dot"></span><span>Updated Jul 6</span>
+        <span class="views">👁 156</span>
+      </div>
+    </a>
+  </main>
+
+  <!-- ── Right: Trending ── -->
+  <aside class="sidebar-right">
+    <h3>Trending</h3>
+    <ul class="trending-list">
+      <li><span class="rank">1</span><span class="info"><span class="name">Recursive Fibonacci</span><span class="meta">Python · 203 views</span></span></li>
+      <li><span class="rank">2</span><span class="info"><span class="name">To-Do List App</span><span class="meta">HTML · 156 views</span></span></li>
+      <li><span class="rank">3</span><span class="info"><span class="name">Hello World Demo</span><span class="meta">HTML · 124 views</span></span></li>
+      <li><span class="rank">4</span><span class="info"><span class="name">Python Loop Example</span><span class="meta">Python · 98 views</span></span></li>
+      <li><span class="rank">5</span><span class="info"><span class="name">CSS Flexbox Layout</span><span class="meta">HTML · 87 views</span></span></li>
+    </ul>
+
+    <h3 style="margin-top:20px;">Popular Tags</h3>
+    <div class="tag-cloud">
+      <span class="tag">css</span>
+      <span class="tag">animation</span>
+      <span class="tag">algorithms</span>
+      <span class="tag">flexbox</span>
+      <span class="tag">loops</span>
+      <span class="tag">recursion</span>
+      <span class="tag">javascript</span>
+      <span class="tag">layout</span>
     </div>
-  </a>
+  </aside>
+
 </div>
 
 <!-- Floating create button -->
 <a href="/create.html" class="create-btn" title="Create new snippet">+</a>
+
+<script>
+  // ── Filter logic ──
+  const filterItems = document.querySelectorAll(".filter-list li");
+  const cards = document.querySelectorAll(".work-card");
+
+  filterItems.forEach(item => {
+    item.addEventListener("click", () => {
+      filterItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+
+      const filter = item.dataset.filter;
+
+      cards.forEach(card => {
+        if (filter === "all" || card.dataset.lang === filter) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
