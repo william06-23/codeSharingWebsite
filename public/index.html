@@ -375,10 +375,6 @@
 
 <!-- Controls -->
 <div class="controls-row">
-  <select id="language">
-    <option value="html">HTML</option>
-    <option value="python">Python</option>
-  </select>
   <button id="runBtn">▶ Run</button>
 </div>
 
@@ -438,7 +434,6 @@ for i in range(5):
   });
 
   // ── DOM refs ──
-  const langSelect = document.getElementById("language");
   const runBtn     = document.getElementById("runBtn");
   const output     = document.getElementById("output");
   const statusDot  = document.getElementById("statusDot");
@@ -449,15 +444,6 @@ for i in range(5):
 
   const expandEditor  = document.getElementById("expandEditor");
   const expandOutput  = document.getElementById("expandOutput");
-
-  const modeMap = { html: "htmlmixed", python: "python" };
-
-  // ── Language switch ──
-  langSelect.addEventListener("change", () => {
-    const lang = langSelect.value;
-    cm.setOption("mode", modeMap[lang]);
-    clearOutput();
-  });
 
   // ── Expand toggles (inline + full-window) ──
   const paneEditor   = document.querySelector(".pane-editor");
@@ -546,7 +532,7 @@ for i in range(5):
   // ── Run ──
   runBtn.addEventListener("click", async () => {
     const code = cm.getValue();
-    const lang = langSelect.value;
+    const lang = cm.getOption("mode") === "python" ? "python" : "html";
 
     statusDot.className = "status-dot";
 
