@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Editor</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* ── Top header bar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      background: #11111b;
+      border-bottom: 1px solid #313244;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar .back-arrow {
+      color: #cba6f7;
+      font-size: 1.3rem;
+      text-decoration: none;
+      font-weight: 700;
+      line-height: 1;
+      padding: 2px 6px;
+    }
+    .topbar .back-arrow:hover { color: #b4befe; }
+
+    .topbar .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #cba6f7;
+    }
+
+    /* ── Page content wrapper ── */
+    .page-content {
+      padding: 20px 20px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* ── Title ── */
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #cba6f7;
+      margin-bottom: 12px;
+    }
+
+    /* ── Description (read-only display) ── */
+    .desc-display {
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      border: 1px solid #45475a;
+      background: #11111b;
+      color: #cdd6f4;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      min-height: 44px;
+    }
+    .desc-display.empty { color: #6c7086; font-style: italic; }
+
+    /* ── Editor + Output row ── */
+    .editor-row {
+      display: flex;
+      gap: 16px;
+      height: 550px;
+      margin-bottom: 12px;
+    }
+
+    .pane {
+      background: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .pane-editor { flex: 0 0 35%; }
+
+    .pane-output { flex: 1; }
+
+    .pane-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #a6adc8;
+      padding: 6px 12px;
+      background: #11111b;
+      border-bottom: 1px solid #313244;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pane-label .expand-btn {
+      margin-left: auto;
+      background: none;
+      border: 1px solid #45475a;
+      color: #a6adc8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+    .pane-label .expand-btn:hover { color: #cba6f7; border-color: #cba6f7; }
+
+    /* ── Inline expand (fill the row) ── */
+    .editor-row.expand-editor .pane-output { display: none; }
+    .editor-row.expand-editor .pane-editor { flex: 1; }
+    .editor-row.expand-output .pane-editor { display: none; }
+    .editor-row.expand-output .pane-output { flex: 1; }
+
+    /* ── Full-window expand (take over entire screen) ── */
+    .pane.fullscreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1000;
+      border-radius: 0;
+      border: none;
+    }
+
+    .pane.fullscreen .expand-fw::after {
+      content: " ✕";
+      font-size: 0.7rem;
+    }
+
+    .pane-body {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .pane-body .CodeMirror {
+      height: 100% !important;
+      font-size: 13px;
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+    }
+
+    .output-inner {
+      height: 100%;
+      overflow: auto;
+    }
+
+    iframe {
+      width: 100%; height: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    .output-text {
+      padding: 12px 16px;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      color: #cdd6f4;
+    }
+    .output-text.error { color: #f38ba8; }
+    .output-text.empty  { color: #6c7086; font-style: italic; }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #6c7086;
+      flex-shrink: 0;
+    }
+    .status-dot.ok  { background: #a6e3a1; }
+    .status-dot.err { background: #f38ba8; }
+
+    /* ── Controls row ── */
+    .controls-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .controls-row select,
+    .controls-row button {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid #45475a;
+      background: #313244;
+      color: #cdd6f4;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .controls-row button {
+      background: #cba6f7;
+      color: #1e1e2e;
+      font-weight: 600;
+      border: none;
+    }
+    .controls-row button:hover { background: #b4befe; }
+
+    /* ── Comment section ── */
+    .comment-section {
+      background: #181825;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .comment-section h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #cba6f7;
+      margin-bottom: 12px;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .comment-form input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #45475a;
+      background: #11111b;
+      color: #cdd6f4;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+
+    .comment-form input::placeholder { color: #6c7086; }
+
+    .comment-form button {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      background: #a6e3a1;
+      color: #1e1e2e;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .comment-form button:hover { background: #94e2d5; }
+
+    .comment-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comment-list li {
+      background: #11111b;
+      border: 1px solid #313244;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .comment-list .text { flex: 1; word-break: break-word; }
+
+    .comment-list .meta {
+      font-size: 0.7rem;
+      color: #6c7086;
+      flex-shrink: 0;
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .comment-empty {
+      color: #6c7086;
+      font-style: italic;
+      font-size: 0.85rem;
+    }
+
+    /* ── Floating scroll-to-comments button ── */
+    .scroll-hint {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #cba6f7;
+      color: #1e1e2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 999;
+      font-size: 0.55rem;
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: center;
+      border: none;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
+    .scroll-hint.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .scroll-hint:hover {
+      background: #b4befe;
+      transform: translateY(-2px);
+    }
+    .scroll-hint.visible:hover {
+      transform: translateY(-2px);
+    }
+    .scroll-hint .arrow {
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top header -->
+<header class="topbar">
+  <a href="/main.html" class="back-arrow">&larr;</a>
+  <span class="brand">NewCode</span>
+</header>
+
+<div class="page-content">
+
+<h1>Code Editor</h1>
+
+<div class="desc-display empty" id="descDisplay">No description provided.</div>
+
+<!-- Editor + Output row -->
+<div class="editor-row">
+  <div class="pane pane-editor">
+    <div class="pane-label">Editor <button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></div>
+    <div class="pane-body" id="editorContainer"></div>
+  </div>
+  <div class="pane pane-output">
+    <div class="pane-label">
+      Output
+      <span class="status-dot" id="statusDot"></span>
+      <button class="expand-btn expand-inline" id="inlineOutput" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandOutput" title="Full window">⛶</button>
+    </div>
+    <div class="pane-body output-inner" id="output"></div>
+  </div>
+</div>
+
+<!-- Controls -->
+<div class="controls-row">
+  <select id="language">
+    <option value="html">HTML</option>
+    <option value="python">Python</option>
+  </select>
+  <button id="runBtn">▶ Run</button>
+</div>
+
+<!-- Comment Section -->
+<div class="comment-section">
+  <h2>Comments</h2>
+  <div class="comment-form">
+    <input type="text" id="commentInput" placeholder="Write a comment…" maxlength="500">
+    <button id="commentBtn">Post</button>
+  </div>
+  <ul class="comment-list" id="commentList">
+    <li class="comment-empty">No comments yet.</li>
+  </ul>
+</div>
+
+<!-- CodeMirror -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+
+<script>
+  // ── Default snippets ──
+  const defaults = {
+    html: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Hello, World!</h1>
+  <p>Type HTML here and click Run to preview.</p>
+</body>
+</html>`,
+
+    python: `print("Hello, World!")
+
+for i in range(5):
+    print(f"Line {i + 1}")`
+  };
+
+  // ── CodeMirror ──
+  const cm = CodeMirror(document.getElementById("editorContainer"), {
+    value: defaults.html,
+    mode: "htmlmixed",
+    theme: "dracula",
+    lineNumbers: true,
+    indentUnit: 2,
+    tabSize: 2,
+    lineWrapping: true,
+    readOnly: true,
+  });
+
+  // ── DOM refs ──
+  const langSelect = document.getElementById("language");
+  const runBtn     = document.getElementById("runBtn");
+  const output     = document.getElementById("output");
+  const statusDot  = document.getElementById("statusDot");
+
+  const commentInput = document.getElementById("commentInput");
+  const commentBtn   = document.getElementById("commentBtn");
+  const commentList  = document.getElementById("commentList");
+
+  const expandEditor  = document.getElementById("expandEditor");
+  const expandOutput  = document.getElementById("expandOutput");
+
+  const modeMap = { html: "htmlmixed", python: "python" };
+
+  // ── Language switch ──
+  langSelect.addEventListener("change", () => {
+    const lang = langSelect.value;
+    cm.setOption("mode", modeMap[lang]);
+    clearOutput();
+  });
+
+  // ── Expand toggles (inline + full-window) ──
+  const paneEditor   = document.querySelector(".pane-editor");
+  const paneOutput   = document.querySelector(".pane-output");
+  const editorRow    = document.querySelector(".editor-row");
+  const inlineEditor = document.getElementById("inlineEditor");
+  const inlineOutput = document.getElementById("inlineOutput");
+
+  // Inline: fill the row
+  inlineEditor.addEventListener("click", () => {
+    exitFullscreen(); // exit full-window if active
+    editorRow.classList.toggle("expand-editor");
+    editorRow.classList.remove("expand-output");
+    cm.refresh();
+  });
+
+  inlineOutput.addEventListener("click", () => {
+    exitFullscreen();
+    editorRow.classList.toggle("expand-output");
+    editorRow.classList.remove("expand-editor");
+  });
+
+  // Full-window: take over entire screen
+  function enterFullscreen(pane) {
+    editorRow.classList.remove("expand-editor", "expand-output"); // exit inline if active
+    pane.classList.add("fullscreen");
+    if (pane === paneEditor) cm.refresh();
+  }
+
+  function exitFullscreen() {
+    paneEditor.classList.remove("fullscreen");
+    paneOutput.classList.remove("fullscreen");
+    cm.refresh();
+  }
+
+  expandEditor.addEventListener("click", () => {
+    if (paneEditor.classList.contains("fullscreen")) {
+      exitFullscreen();
+    } else {
+      exitFullscreen();
+      enterFullscreen(paneEditor);
+    }
+  });
+
+  expandOutput.addEventListener("click", () => {
+    if (paneOutput.classList.contains("fullscreen")) {
+      exitFullscreen();
+    } else {
+      exitFullscreen();
+      enterFullscreen(paneOutput);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && (paneEditor.classList.contains("fullscreen") || paneOutput.classList.contains("fullscreen"))) {
+      exitFullscreen();
+    }
+  });
+
+  // ── Output helpers ──
+  function showIframe(htmlCode) {
+    output.innerHTML = "";
+    const iframe = document.createElement("iframe");
+    iframe.sandbox = "allow-scripts allow-same-origin";
+    iframe.srcdoc = htmlCode;
+    output.appendChild(iframe);
+  }
+
+  function showText(text, isError) {
+    output.innerHTML = "";
+    const pre = document.createElement("pre");
+    pre.className = "output-text" + (isError ? " error" : "");
+    pre.textContent = text || "No output.";
+    output.appendChild(pre);
+  }
+
+  function clearOutput() {
+    output.innerHTML = "";
+    statusDot.className = "status-dot";
+    const pre = document.createElement("pre");
+    pre.className = "output-text empty";
+    pre.textContent = "Click Run to see output.";
+    output.appendChild(pre);
+  }
+
+  // ── Run ──
+  runBtn.addEventListener("click", async () => {
+    const code = cm.getValue();
+    const lang = langSelect.value;
+
+    statusDot.className = "status-dot";
+
+    if (lang === "html") {
+      showIframe(code);
+      statusDot.className = "status-dot ok";
+      return;
+    }
+
+    if (lang === "python") {
+      try {
+        const resp = await fetch("/api/run/python", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
+        const data = await resp.json();
+
+        const combined = [
+          data.output ? data.output.trimEnd() : "",
+          data.error  ? data.error.trimEnd()  : "",
+        ].filter(Boolean).join("\n");
+
+        if (data.error && !data.output) {
+          showText(combined, true);
+          statusDot.className = "status-dot err";
+        } else {
+          showText(combined, !!data.error);
+          statusDot.className = data.error ? "status-dot err" : "status-dot ok";
+        }
+      } catch {
+        showText("Failed to reach the server. Is it running?", true);
+        statusDot.className = "status-dot err";
+      }
+    }
+  });
+
+  // Ctrl+Enter shortcut
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      runBtn.click();
+    }
+  });
+
+  // ── Comments ──
+  let comments = [];
+  const emptyLi = commentList.querySelector(".comment-empty");
+
+  function renderComments() {
+    commentList.innerHTML = "";
+    if (comments.length === 0) {
+      const li = document.createElement("li");
+      li.className = "comment-empty";
+      li.textContent = "No comments yet.";
+      commentList.appendChild(li);
+      return;
+    }
+    comments.forEach((c) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="text">${escapeHtml(c.text)}</span><span class="meta">${c.time}</span>`;
+      commentList.appendChild(li);
+    });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  commentBtn.addEventListener("click", () => {
+    const text = commentInput.value.trim();
+    if (!text) return;
+    const now = new Date();
+    const time = now.toLocaleString();
+    comments.push({ text, time });
+    commentInput.value = "";
+    renderComments();
+  });
+
+  commentInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") commentBtn.click();
+  });
+
+  // ── Scroll-to-comments hint ──
+  const scrollHint = document.getElementById("scrollHint");
+  const commentSection = document.querySelector(".comment-section");
+
+  scrollHint.addEventListener("click", () => {
+    commentSection.scrollIntoView({ behavior: "smooth" });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    scrollHint.classList.toggle("visible", !entries[0].isIntersecting);
+  }, { threshold: 0.1 });
+  observer.observe(commentSection);
+
+  // Init
+  clearOutput();
+</script>
+
+</div><!-- /page-content -->
+
+<!-- Floating scroll hint -->
+<button class="scroll-hint" id="scrollHint" title="Scroll to comments">
+  <span>Com</span><span class="arrow">↓</span>
+</button>
+
+</body>
+</html>
