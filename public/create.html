@@ -131,7 +131,6 @@
     }
 
     .pane-label .expand-btn {
-      margin-left: auto;
       background: none;
       border: 1px solid #45475a;
       color: #a6adc8;
@@ -144,8 +143,6 @@
     .pane-label .expand-btn:hover { color: #cba6f7; border-color: #cba6f7; }
 
     .pane-label .lang-inline {
-      margin-left: auto;
-      margin-right: 4px;
       padding: 2px 6px;
       border-radius: 4px;
       border: 1px solid #45475a;
@@ -158,6 +155,13 @@
       cursor: pointer;
     }
     .pane-label .lang-inline:hover { border-color: #cba6f7; color: #cba6f7; }
+
+    .pane-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
     /* Inline expand */
     .editor-row.expand-editor .pane-output { display: none; }
@@ -279,14 +283,14 @@
 <!-- Editor + Output row -->
 <div class="editor-row">
   <div class="pane pane-editor">
-    <div class="pane-label">Editor <select id="language" class="lang-inline"><option value="html">HTML</option><option value="python">Python</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></div>
+    <div class="pane-label">Editor <span class="pane-actions"><select id="language" class="lang-inline"><option value="html">HTML</option><option value="python">Python</option></select><button class="expand-btn expand-inline" id="inlineEditor" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandEditor" title="Full window">⛶</button></span></div>
     <div class="pane-body" id="editorContainer"></div>
   </div>
   <div class="pane pane-output">
     <div class="pane-label">
       Output
       <span class="status-dot" id="statusDot"></span>
-      <button class="expand-btn expand-inline" id="inlineOutput" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandOutput" title="Full window">⛶</button>
+      <span class="pane-actions"><button class="expand-btn expand-inline" id="inlineOutput" title="Expand to fill row">↔</button><button class="expand-btn expand-fw" id="expandOutput" title="Full window">⛶</button></span>
     </div>
     <div class="pane-body output-inner" id="output"></div>
   </div>
